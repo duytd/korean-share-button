@@ -24,24 +24,14 @@ network($amt)
 
 socialIcon($name)
   li[class*={"'" + $name + "'"}]
-    background: convert($name)
- 
-    &:before
-      background-image: svg($name, '[fill]: #fff')
+    background-image: svg($name)
+    background-size: 40px 40px
+    &:hover
+      opacity: 0.7
+      transition: 0.5s
 
-    &:after
-      background-image: svg($name, '[fill]: #000') 
+networks = 'email' 'facebook' 'googlePlus' 'linkedin' 'pinterest' 'reddit' 'twitter' 'whatsapp' 'kakaotalk' 'kakaostory' 'naverline' 'naverband' 'naverblog'
 
-networks = 'email' 'facebook' 'googlePlus' 'linkedin' 'pinterest' 'reddit' 'twitter' 'whatsapp'
-
-email = #42C5B0
-facebook = #3B5998
-googlePlus = #E34429
-linkedin = #4875B4
-pinterest = #C5282F
-reddit = #a1caf2
-twitter = #6CDFEA
-whatsapp = #4DC247
 label-bg = #a29baa
 label-color = #333333
 
@@ -71,7 +61,6 @@ share-button
     width: 1em
     height: 1em
     content: ' '
-    background: svg("export", "[fill]: #000") no-repeat
 
   .sb-social
     position: absolute
@@ -169,12 +158,8 @@ share-button
 
       li
         position: relative
-        height: 22px
-        width: 60px
-        padding: 12px 0
-        margin: 0
-        text-align: center
-        font-size: 20px
+        height: 40px
+        width: 40px
         cursor: pointer
         z-index: 2
         box-sizing: content-box
@@ -192,14 +177,8 @@ share-button
 
           &:after
             opacity: .5
-
+      
         &:before, &:after
-          content: ' '
-          position: absolute
-          width: inherit
-          height: inherit
-          transform: translate(-20%, 0)
-          transition()
           background-repeat: no-repeat !important
 
         &:before
@@ -218,4 +197,3 @@ share-button
 
     for name in networks
       socialIcon(name)
-

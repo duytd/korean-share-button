@@ -87,7 +87,19 @@
   <pre><span class="new">new </span><span class="class">share-button</span>();</pre>
   <script src='dist/share-button.js'></script>
   <script>
-    var shareButton = new ShareButton();
+    var shareButton = new ShareButton({
+      title: "Korean Social Share",
+      url: "https://github.com/duytd/korean-share-button",
+      description: "Social Share For Korean: KakaoLink, KakaoStory, NaverLine, NaverBand, NaverBlog",
+      networks: {
+        facebook: {
+          appId: "",
+        },
+        kakaotalk: {
+          appKey: "b62b860e7e1ef55d428ba912b76a2485"
+        }
+      }
+    });
   </script>
 </body>
 

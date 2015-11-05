@@ -90,6 +90,41 @@ class ShareButton extends ShareUtils {
           enabled: true,
           title: null,
           description: null
+        },
+        'kakaotalk': {
+          enabled: true,
+          url: null,
+          title: null,
+          description: null,
+          siteUrl: null,
+          loadSdk: true,
+          appKey: null
+        },
+        'kakaostory': {
+          enabled: true,
+          url: null,
+          title: null,
+          description: null,
+          loadSdk: true,
+          appKey: null
+        },
+        'naverline': {
+          enabled: true,
+          url: null,
+          title: null,
+          description: null
+        },
+        'naverband': {
+          enabled: true,
+          url: null,
+          title: null,
+          description: null
+        },
+        'naverblog': {
+          enabled: true,
+          url: null,
+          title: null,
+          description: null
         }
       }
     };
@@ -169,9 +204,20 @@ class ShareButton extends ShareUtils {
     // Adding user configs to default configs
     this._merge(this.config, opts);
 
-    // Disable whatsapp display if not a mobile device
-    if (this.config.networks.whatsapp.enabled && !this._isMobile())
-      this.config.networks.whatsapp.enabled = false;
+    // Disable whatsapp, kakaotalk, naverline, naverband display if not a mobile device
+    if (!this._isMobile()) {
+      if (this.config.networks.whatsapp.enabled)
+        this.config.networks.whatsapp.enabled = false;
+
+      if (this.config.networks.kakaotalk.enabled)
+        this.config.networks.kakaotalk.enabled = false;
+
+      if (this.config.networks.naverline.enabled)
+        this.config.networks.naverline.enabled = false;
+
+      if (this.config.networks.naverband.enabled)
+        this.config.networks.naverband.enabled = false;
+    }
 
     // Default order of networks if no network order entered
     if (this.config.ui.networkOrder.length === 0)
@@ -183,7 +229,12 @@ class ShareButton extends ShareUtils {
         'googlePlus',
         'reddit',
         'linkedin',
-        'email'
+        'email',
+        'kakaotalk',
+        'kakaostory',
+        'naverline',
+        'naverband',
+        'naverblog'
       ];
 
     for (let network of Object.keys(this.config.networks)) {
@@ -192,7 +243,6 @@ class ShareButton extends ShareUtils {
         this.config.ui.networkOrder.push(network);
       }
     }
-
     this._fixFlyout();
     this._detectNetworks();
     this._normalizeNetworkConfiguration();
@@ -201,6 +251,11 @@ class ShareButton extends ShareUtils {
     if (this.config.networks.facebook.enabled &&
        this.config.networks.facebook.loadSdk)
        this._injectFacebookSdk();
+
+     // Inject Kakao JS SDK (if Kakao is enabled)
+     if ((this.config.networks.kakaotalk.enabled && this.config.networks.kakaotalk.loadSdk) ||
+       (this.config.networks.kakaostory.enabled && this.config.networks.kakaostory.loadSdk))
+       this._injectKakaoSdk();
 
     // Initialize instances
     let index = 0;
@@ -600,6 +655,88 @@ class ShareButton extends ShareUtils {
   }
 
   /**
+   * @method _networkKakaoTalk
+   * @description Create & display a KakaoTalk window
+   * @private
+   */
+  _networkKakaotalk(element) {
+    if (this.config.networks.kakaostory.loadSdk && window.Kakao) {
+      return Kakao.Link.sendTalkLink({
+        label: this.config.networks.kakotalk.description,
+        weblink: {
+          text: this.config.networks.kakaotalk.url,
+          url: this.config.networks.kakaotalk.siteUrl
+        }
+      });
+    } else
+        return console.error('The Kakao JS SDK hasn\'t loaded yet.');
+  }
+
+  /**
+   * @method _networkKakaoStory
+   * @description Create & display a KakaoStory window
+   * @private
+   */
+  _networkKakaostory(element) {
+    if (this.config.networks.kakaostory.loadSdk) {
+      if (!window.Kakao) {
+        this._updateHref(element, 'https://story.kakao.com/s/share', {
+          url: this.config.networks.kakaostory.url,
+          text: this.config.networks.kakaostory.description
+        });
+        return console.error('The Kakao JS SDK hasn\'t loaded yet.');
+      }
+      return Kakao.Story.share({
+        url: this.config.networks.kakaostory.url,
+        text: this.config.networks.kakaostory.description
+      });
+    } else
+      return this._updateHref(
+        element,
+        'https://story.kakao.com/s/share', {
+          url: this.config.networks.kakaostory.url,
+          text: this.config.networks.kakaostory.description
+        }
+      );
+  }
+
+  /**
+   * @method _networkNaverline
+   * @description Create & display a Naverline window
+   * @private
+   */
+  _networkNaverline(element) {
+    this._updateHref(element, 'http://line.naver.jp/R/msg/text/?' +
+      config.networks.naverline.description + encodeURIComponent('\r\n') +
+      this.config.networks.naverline.url, {
+    });
+  }
+
+ /**
+   * @method _networkNaverband
+   * @description Create & display a Naverline window
+   * @private
+   */
+  _networkNaverband(element) {
+    this._updateHref(element, 'bandapp://create/post', {
+      text: this.config.networks.naverband.description + encodeURIComponent('\r\n') +
+        this.config.networks.naverband.url
+    });
+  }
+
+ /**
+   * @method _networkNaverblog
+   * @description Create & display a Naverline window
+   * @private
+   */
+  _networkNaverblog(element) {
+    this._updateHref(element, 'http://blog.naver.com/openapi/share', {
+      url: this.config.networks.naverblog.url,
+      title: this.config.networks.naverblog.description
+    });
+  }
+
+  /**
    * @method _injectStylesheet
    * @description Inject link to stylesheet
    * @private
@@ -647,6 +784,16 @@ class ShareButton extends ShareUtils {
       fbRoot.id = 'fb-root';
 
       this.el.body.appendChild(fbRoot);
+      this.el.body.appendChild(script);
+    }
+  }
+
+  _injectKakaoSdk() {
+    if (!window.Kakao && this.config.networks.kakaotalk.appKey) {
+      let script = document.createElement('script');
+
+      script.text = `!function(a,e){e=a.createElement("script"),e.type="text/javascript",e.async=!0,e.onload=function(){Kakao.init('${this.config.networks.kakaotalk.appKey}')},e.src="https://developers.kakao.com/sdk/js/kakao.min.js",a.getElementsByTagName("head")[0].appendChild(e)}(document)`;
+
       this.el.body.appendChild(script);
     }
   }

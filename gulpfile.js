@@ -21,7 +21,7 @@ gulp.task('style', function() {
       use: [
         autoprefixer(),
         axis(),
-        poststylus([postcssSVG({ paths: ['./src/svg' ]})])
+        poststylus([postcssSVG({ paths: ['./src/svg', './src/svg/korean_sns']})])
       ]
     }))
     .pipe(gulp.dest('dist/'))
