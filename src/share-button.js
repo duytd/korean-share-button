@@ -96,7 +96,6 @@ class ShareButton extends ShareUtils {
           url: null,
           title: null,
           description: null,
-          siteUrl: null,
           loadSdk: true,
           appKey: null
         },
@@ -118,7 +117,11 @@ class ShareButton extends ShareUtils {
           enabled: true,
           url: null,
           title: null,
-          description: null
+          description: null,
+          appStore:'itms-apps://itunes.apple.com/app/id542613198?mt=8',
+          appProto: 'bandapp://',
+          googleStore:'market://details?id=com.nhn.android.band',
+          googleProto:'scheme=bandapp;package=com.nhn.android.band'
         },
         'naverblog': {
           enabled: true,
@@ -660,12 +663,12 @@ class ShareButton extends ShareUtils {
    * @private
    */
   _networkKakaotalk(element) {
-    if (this.config.networks.kakaostory.loadSdk && window.Kakao) {
+    if (this.config.networks.kakaotalk.loadSdk && window.Kakao) {
       return Kakao.Link.sendTalkLink({
-        label: this.config.networks.kakotalk.description,
-        weblink: {
-          text: this.config.networks.kakaotalk.url,
-          url: this.config.networks.kakaotalk.siteUrl
+        label: this.config.networks.kakaotalk.description,
+        webLink: {
+          text: this.config.networks.kakaotalk.title,
+          url: this.config.networks.kakaotalk.url
         }
       });
     } else
@@ -707,7 +710,7 @@ class ShareButton extends ShareUtils {
    */
   _networkNaverline(element) {
     this._updateHref(element, 'http://line.naver.jp/R/msg/text/?' +
-      config.networks.naverline.description + encodeURIComponent('\r\n') +
+      this.config.networks.naverline.description + encodeURIComponent('\r\n') +
       this.config.networks.naverline.url, {
     });
   }
@@ -718,10 +721,16 @@ class ShareButton extends ShareUtils {
    * @private
    */
   _networkNaverband(element) {
-    this._updateHref(element, 'bandapp://create/post', {
-      text: this.config.networks.naverband.description + encodeURIComponent('\r\n') +
-        this.config.networks.naverband.url
-    });
+    var config = this.config.networks.naverband;
+    var text = config.description + encodeURIComponent('\r\n') + config.url;
+
+    if(navigator.userAgent.match(/android/i)){
+      return this._updateHref(element, 'intent://create/post?text=' + text + '#Intent;' + config.googleProto + ';end');
+    }
+    else if(navigator.userAgent.match(/(iphone)|(ipod)|(ipad)/i)){
+      setTimeout(function () { window.location = config.appStore; }, 100);
+      return this._updateHref(element, config.appProto + 'create/post?text=' + text);
+    }
   }
 
  /**
