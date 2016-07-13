@@ -659,6 +659,10 @@ var _shareUtils = _dereq_('./share-utils');
 
 var _shareUtils2 = _interopRequireDefault(_shareUtils);
 
+var _stringUtils = _dereq_('./string-utils');
+
+var _stringUtils2 = _interopRequireDefault(_stringUtils);
+
 /**
  * Sharebutton
  * @class
@@ -1030,7 +1034,7 @@ var ShareButton = (function (_ShareUtils) {
               _this._hook('before', name, instance);
             });
             a.addEventListener('mouseup', function () {
-              _this['_network' + name.capFLetter()](network);
+              _this['_network' + _stringUtils2['default'].capFLetter(name)](network);
             });
             a.addEventListener('click', function () {
               _this._hook('after', name, instance);
@@ -1755,12 +1759,7 @@ var ShareButton = (function (_ShareUtils) {
 
 module.exports = ShareButton;
 
-},{"./share-utils":40,"core-js/fn/array/iterator":1,"core-js/fn/math/trunc":2,"core-js/fn/symbol":3}],40:[function(_dereq_,module,exports){
-/**
- * ShareUtils
- * @class
- * @classdesc A nice set of utilities.
- */
+},{"./share-utils":40,"./string-utils":41,"core-js/fn/array/iterator":1,"core-js/fn/math/trunc":2,"core-js/fn/symbol":3}],40:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1769,20 +1768,24 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _stringUtils = _dereq_('./string-utils');
+
+var _stringUtils2 = _interopRequireDefault(_stringUtils);
+
+/**
+ * ShareUtils
+ * @class
+ * @classdesc A nice set of utilities.
+ */
 
 var ShareUtils = (function () {
   function ShareUtils() {
     _classCallCheck(this, ShareUtils);
   }
-
-  /**
-   * @method toRFC3986
-   * @description Encodes the string in RFC3986
-   * @memberof String
-   *
-   * @return {String}
-   */
 
   _createClass(ShareUtils, [{
     key: "_getStyle",
@@ -1881,7 +1884,7 @@ var ShareUtils = (function () {
   }, {
     key: "_isEncoded",
     value: function _isEncoded(str) {
-      str = str.toRFC3986();
+      str = _stringUtils2["default"].toRFC3986(str);
       return decodeURIComponent(str) !== str;
     }
 
@@ -1896,7 +1899,7 @@ var ShareUtils = (function () {
   }, {
     key: "_encode",
     value: function _encode(str) {
-      if (typeof str === 'undefined' || str === null || this._isEncoded(str)) return encodeURIComponent(str);else return str.toRFC3986();
+      if (typeof str === 'undefined' || str === null || this._isEncoded(str)) return encodeURIComponent(str);else return _stringUtils2["default"].toRFC3986(str);
     }
 
     /**
@@ -2120,25 +2123,65 @@ var ShareUtils = (function () {
   return ShareUtils;
 })();
 
-String.prototype.toRFC3986 = function () {
-  var tmp = encodeURIComponent(this);
-  tmp.replace(/[!'()*]/g, function (c) {
-    return "%" + c.charCodeAt(0).toString(16);
-  });
-};
-
-/**
- * @method capFLetter
- * @description Does exactly what the method name states
- * @memberof String
- *
- * @return {String}
- */
-String.prototype.capFLetter = function () {
-  return this.charAt(0).toUpperCase() + this.slice(1);
-};
-
 exports["default"] = ShareUtils;
+module.exports = exports["default"];
+
+},{"./string-utils":41}],41:[function(_dereq_,module,exports){
+/**
+ * StringUtils
+ * @class
+ * @classdesc String utilities.
+ */
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var StringUtils = (function () {
+  function StringUtils() {
+    _classCallCheck(this, StringUtils);
+  }
+
+  _createClass(StringUtils, null, [{
+    key: "toRFC3986",
+
+    /**
+     * @method toRFC3986
+     * @description Encodes the string in RFC3986
+     *
+     * @param {String}
+     * @return {String}
+     */
+    value: function toRFC3986(s) {
+      var tmp = encodeURIComponent(s);
+      tmp.replace(/[!'()*]/g, function (c) {
+        return "%" + c.charCodeAt(0).toString(16);
+      });
+    }
+
+    /**
+     * @method capFLetter
+     * @description Returns a capitalized version of the string
+     *
+     * @param {String}
+     * @return {String}
+     */
+  }, {
+    key: "capFLetter",
+    value: function capFLetter(s) {
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+  }]);
+
+  return StringUtils;
+})();
+
+exports["default"] = StringUtils;
 module.exports = exports["default"];
 
 },{}]},{},[39])
