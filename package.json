@@ -1,13 +1,17 @@
 {
-  "name": "share-button",
-  "description": "fast, beautiful, and painless social shares",
-  "version": "1.0.3",
+  "name": "korea-share-button",
+  "description": "Korea version of share-button",
+  "version": "1.1.0",
   "homepage": "http://sharebutton.co",
   "bugs": {
-    "url": "https://github.com/carrot/share-button/issues"
+    "url": "https://github.com/duytd/korean-share-button/issues"
   },
   "author": "Jeff Escalante <hello@jenius.me>",
   "contributors": [
+    {
+      "name": "Duy Trinh Duc <Add Korea version>",
+      "email": "duytd.hanu@gmail.com"
+    },
     {
       "name": "Tom Milewski",
       "email": "tmilewski@gmail.com"
@@ -23,7 +27,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/carrot/share-button"
+    "url": "https://github.com/duytd/korean-share-button"
   },
   "license": "MIT",
   "dependencies": {

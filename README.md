@@ -1,7 +1,7 @@
-<h1 align="center">Share Button</h1>
+<h1 align="center">Korea Version of Share Button <https://github.com/carrot/share-button></h1>
 
 <p align="center">
-  <img src="https://cldup.com/K3-R0bY2T8.gif"/>
+  <img src="http://i.imgur.com/UODN0Ri.png" width="300" />
 </p>
 <p align="center">
   <a title="Build Status" href="https://travis-ci.org/carrot/share-button">
@@ -10,26 +10,17 @@
 </p>
 
 # An Introduction
-Simple, light, flexible, and good-looking share button. [See it in action!](http://sharebutton.co/)
+Korea Version of Share Button - A Simple, light, flexible, and good-looking share button. [See it in action!](http://sharebutton.co/)
 
-## Why Should You Use This?
-All major social networks have their own share widgets you can put on your page, but this isn't ideal for a variety of reasons:
-
-1. They tend to be slow-loading.
-2. They inject extra javascript and DOM elements into your page making it slower.
-3. They generally aren't customizable enough to fit the design of your site.
-4. Managing each provider's code snippets etc is repetitive and needless. Additionally, they can make your front-end code quite messy.
-5. The buttons themselves take up a lot of space (especially the Facebook share button).
-
-Let's take a quick look at the alternative, using this little plugin:
-
-1. It doesn't load any iframes or extra javascript making the overall load time much faster.
-2. It looks simple and clean by default, and can be customized in any and every way.
-3. All you have to do to use it is include the script and call `new ShareButton` on a `share-button` element. That's two lines of code total, the script link and the share call.
-4. It's tiny and compact, expanding only when the user actually wants to share something.
+## Korea SNS supported?
+1. KakaoStory (PC)
+2. KakaoTalk (Mobile)
+3. NaverLine (Mobile)
+4. NaverBand (Mobile)
+5. NaverBlog (PC)
 
 # Getting Started
-1. [Download the latest script & stylesheet](https://github.com/carrot/share-button/releases) and include it on your page.
+1. [Download the latest script & stylesheet](https://github.com/duytd/korean-share-button/releases) and include it on your page.
 2. Make a `share-button` element on your page
 3. In your javascript, call `new ShareButton()`
 4. Pass options to the share call if you want (details below)
@@ -70,12 +61,6 @@ share.open();   // open the share button popup
 share.close();  // closes the share button popup
 share.config;   // exposes the configurations listed above
 ```
-
-# Fonts
-As of version 1.0.0 we completely removed the `Entypo` font set!
-
-# Inspiration
-This project was inspired by [this dribbble shot](http://dribbble.com/shots/1072278) and [this cssdeck experiment](http://cssdeck.com/labs/css-social-share-button) - huge props to these two guys for some incredible ideas and work.
 
 # Contributing and License
 - Contributing Guidelines can be found [here](https://github.com/carrot/share-button/blob/master/CONTRIBUTING.md)
